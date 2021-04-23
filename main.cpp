@@ -3,18 +3,23 @@
 
 using namespace std;
 
+vector<double>
+input_numbers(size_t count) {
+    vector<double> result(count);
+    for (size_t i = 0; i < count; i++) {
+        cin >> result[i];
+    }
+    return result;
+}
+
 int
 main() {
     // ¬вод данных
     size_t number_count;
     cerr << "Enter number count: ";
     cin >> number_count;
-
     cerr << "Enter numbers: ";
-    vector<double> numbers(number_count);
-    for (size_t i = 0; i < number_count; i++) {
-        cin >> numbers[i];
-    }
+    const auto numbers = input_numbers(number_count);
 
     size_t bin_count;
     cerr << "Enter column count: ";

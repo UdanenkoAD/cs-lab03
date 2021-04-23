@@ -4,7 +4,7 @@
 using namespace std;
 
 vector<double>
-input_numbers(size_t count) {
+input_numbers(size_t count){
     vector<double> result(count);
     for (size_t i = 0; i < count; i++) {
         cin >> result[i];
@@ -14,7 +14,7 @@ input_numbers(size_t count) {
 
 
 
-void find_minmax(vector<double> numbers, double& min, double& max) {
+void find_minmax(vector<double> numbers, double& min, double& max){
     min = numbers[0];
     max = numbers[0];
     for (double number : numbers) {
@@ -30,8 +30,7 @@ void find_minmax(vector<double> numbers, double& min, double& max) {
 
 
 
-vector <size_t> make_histogram(vector<double> numbers,size_t bin_count)
-    {
+vector <size_t> make_histogram(vector<double> numbers,size_t bin_count){
         double max;
         double min;
         find_minmax(numbers, min, max);
@@ -47,25 +46,8 @@ vector <size_t> make_histogram(vector<double> numbers,size_t bin_count)
 }
 
 
-
-int
-main() {
-    // Ввод данных
-    size_t number_count;
-    cerr << "Enter number count: ";
-    cin >> number_count;
-    cerr << "Enter numbers: ";
-    const auto numbers = input_numbers(number_count);
-    size_t bin_count;
-    cerr << "Enter column count: ";
-    cin >> bin_count;
-
-    // Обработка данных
-     const auto bins = make_histogram(numbers, bin_count);
-
-
-    // Вывод данных
-    const size_t SCREEN_WIDTH = 80;
+ void show_histogram_text(vector<size_t> bins){
+         const size_t SCREEN_WIDTH = 80;
     const size_t MAX_ASTERISK = SCREEN_WIDTH - 4 - 1;
 
     size_t max_count = 0;
@@ -96,6 +78,27 @@ main() {
         }
         cout << '\n';
     }
+       return;
+}
 
+
+
+int
+main() {
+    // Ввод данных
+    size_t number_count;
+    cerr << "Enter number count: ";
+    cin >> number_count;
+    cerr << "Enter numbers: ";
+    const auto numbers = input_numbers(number_count);
+    size_t bin_count;
+    cerr << "Enter column count: ";
+    cin >> bin_count;
+
+    // Обработка данных
+     const auto bins = make_histogram(numbers, bin_count);
+
+    // Вывод данных
+    show_histogram_text(bins);
     return 0;
 }

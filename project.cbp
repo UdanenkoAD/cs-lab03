@@ -34,6 +34,10 @@
 		</Compiler>
 		<Unit filename=".gitignore" />
 		<Unit filename="main.cpp" />
+		<Unit filename="svg.cpp" />
+		<Unit filename="svg.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

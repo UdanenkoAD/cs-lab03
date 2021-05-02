@@ -32,7 +32,7 @@ void svg_rect(double x, double y, double width, double height, string stroke, st
 
 void
 show_histogram_svg(const vector<size_t>& bins) {
-    const auto IMAGE_WIDTH = 400;
+    const auto IMAGE_WIDTH = 810;
     const auto IMAGE_HEIGHT = 300;
     const auto TEXT_LEFT = 20;
     const auto TEXT_BASELINE = 20;
@@ -41,7 +41,7 @@ show_histogram_svg(const vector<size_t>& bins) {
     const auto BLOCK_WIDTH = 10;
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
     const size_t SCREEN_WIDTH = 80;
-    const size_t MAX_ASTERISK = SCREEN_WIDTH - 4 - 1;
+    const size_t MAX_ASTERISK = SCREEN_WIDTH - 3 - 1;
 
     size_t max_count = 0;
     for (size_t count : bins) {
@@ -49,6 +49,7 @@ show_histogram_svg(const vector<size_t>& bins) {
             max_count = count;
         }
     }
+    size_t kolichestvo_probelov;
     double top = 0;
 for (size_t bin : bins) {
     const bool scaling_needed = max_count > MAX_ASTERISK;
@@ -57,10 +58,19 @@ for (size_t bin : bins) {
             const double scaling_factor = (double)MAX_ASTERISK / max_count;
             height = (size_t)(bin * scaling_factor);
         }
+    if (max_count < MAX_ASTERISK)
+        kolichestvo_probelov = max_count - height;
+    else
+        kolichestvo_probelov = MAX_ASTERISK - height;
+        const double width_factor = (double)MAX_ASTERISK / max_count;
     const double bin_width = BLOCK_WIDTH * height;
-    svg_text(TEXT_LEFT, top + TEXT_BASELINE, to_string(bin));
-    svg_rect(TEXT_WIDTH, top, bin_width, BIN_HEIGHT, "red" , "#c71585");
+    const double bin_probel = BLOCK_WIDTH * kolichestvo_probelov;
+    svg_rect(0, top, bin_probel, BIN_HEIGHT, "white" , "#ffeceb");
+    svg_rect(bin_probel, top, bin_width, BIN_HEIGHT, "white" , "#c71585");
+    svg_text(TEXT_LEFT+bin_probel+bin_width, top + TEXT_BASELINE, to_string(bin));
     top += BIN_HEIGHT;
     }
     svg_end();
 }
+//
+

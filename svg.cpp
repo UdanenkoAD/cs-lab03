@@ -49,7 +49,7 @@ show_histogram_svg(const vector<size_t>& bins) {
             max_count = count;
         }
     }
-    size_t kolichestvo_probelov;
+    size_t kolichestvo_probelov=0;
     double top = 0;
 for (size_t bin : bins) {
     const bool scaling_needed = max_count > MAX_ASTERISK;
@@ -62,7 +62,6 @@ for (size_t bin : bins) {
         kolichestvo_probelov = max_count - height;
     else
         kolichestvo_probelov = MAX_ASTERISK - height;
-        const double width_factor = (double)MAX_ASTERISK / max_count;
     const double bin_width = BLOCK_WIDTH * height;
     const double bin_probel = BLOCK_WIDTH * kolichestvo_probelov;
     svg_rect(0, top, bin_probel, BIN_HEIGHT, "white" , "#ffeceb");

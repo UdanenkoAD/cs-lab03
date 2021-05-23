@@ -2,6 +2,8 @@
 #include <vector>
 #include "histogram.h"
 #include "svg.h"
+#include <curl/curl.h>
+
 
 using namespace std;
 
@@ -95,6 +97,7 @@ vector <size_t> make_histogram(struct Input data){
 
 int
 main(){
+    curl_global_init(CURL_GLOBAL_ALL);
     // ¬вод данных
      const auto input = read_input(cin,true);
 

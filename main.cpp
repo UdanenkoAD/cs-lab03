@@ -17,7 +17,8 @@ input_numbers(istream& in, size_t count) {
 
 
 Input
-read_input(istream& in) {
+read_input(istream& in, bool prompt) {
+    if (prompt){
     Input data;
 
     cerr << "Enter number count: ";
@@ -32,6 +33,7 @@ read_input(istream& in) {
     in >> data.bin_count;
 
     return data;
+    }
 }
 
 
@@ -94,7 +96,7 @@ vector <size_t> make_histogram(struct Input data){
 int
 main(){
     // ¬вод данных
-     const auto input = read_input(cin);
+     const auto input = read_input(cin,true);
 
     // ќбработка данных
      const auto bins = make_histogram(input);

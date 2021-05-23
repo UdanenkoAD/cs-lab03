@@ -3,6 +3,8 @@
 #include "histogram.h"
 #include "svg.h"
 #include <curl/curl.h>
+#include <sstream>
+#include <string>
 
 
 using namespace std;
@@ -20,22 +22,23 @@ input_numbers(istream& in, size_t count) {
 
 Input
 read_input(istream& in, bool prompt) {
-    if (prompt){
     Input data;
 
-    cerr << "Enter number count: ";
+    if (prompt)
+        cerr << "Enter number count: ";
     size_t number_count;
     in >> number_count;
 
-    cerr << "Enter numbers: ";
+    if (prompt)
+        cerr << "Enter numbers: ";
     data.numbers = input_numbers(in, number_count);
 
-    cerr << "Enter column count: ";
+    if (prompt)
+        cerr << "Enter column count: ";
     size_t bin_count;
     in >> data.bin_count;
 
     return data;
-    }
 }
 
 
@@ -93,29 +96,45 @@ vector <size_t> make_histogram(struct Input data){
 }
 
 
+size_t
+write_data(void* items, size_t item_size, size_t item_count, void* ctx) {
+    auto data_size=item_size*item_count;
+    stringstream* buffer = reinterpret_cast<stringstream*>(ctx);
+    buffer->write(reinterpret_cast<char*>(items), data_size);
+    return data_size;
+}
 
 
-int
-main(int argc, char* argv[]){
+Input
+download(const string& address) {
+    stringstream buffer;
     curl_global_init(CURL_GLOBAL_ALL);
-    if (argc>1)
-    {
-       CURL* curl = curl_easy_init();
+    CURL* curl = curl_easy_init();
        if(curl) {
             CURLcode res;
-            curl_easy_setopt(curl, CURLOPT_URL, argv[1]);
+            curl_easy_setopt(curl, CURLOPT_URL,  address.c_str());
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, &buffer);
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
             res = curl_easy_perform(curl);
-            if (res != CURLE_OK)
+            if (res)
             {
                 cerr << curl_easy_strerror(res) << endl;
                 exit(1);
             }
-            curl_easy_cleanup(curl);
         }
-        return 0;
+        curl_easy_cleanup(curl);
+    return read_input(buffer, false);
+}
+
+
+int
+main(int argc, char* argv[]){
+   Input input;
+    if (argc > 1) {
+        input = download(argv[1]);
+    } else {
+        input = read_input(cin, true);
     }
-    // ¬вод данных
-     const auto input = read_input(cin,true);
 
     // ќбработка данных
      const auto bins = make_histogram(input);

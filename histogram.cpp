@@ -4,12 +4,12 @@
 using namespace std;
 
 
-void find_minmax(vector<double> numbers, double& min, double& max){
-    if (numbers.size() == 0)
+void find_minmax(struct Input t, double& min, double& max){
+    if (t.numbers.size() == 0)
         return;
-    min = numbers[0];
-    max = numbers[0];
-    for (double number : numbers) {
+    min = t.numbers[0];
+    max = t.numbers[0];
+    for (double number : t.numbers) {
         if (number < min) {
             min = number;
         }

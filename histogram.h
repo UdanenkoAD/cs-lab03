@@ -3,5 +3,10 @@
 
 using namespace std;
 
-void find_minmax(vector<double> numbers, double& min, double& max);
+struct Input {
+    vector<double> numbers;
+    size_t bin_count;
+};
+
+void find_minmax(struct Input t, double& min, double& max);
 

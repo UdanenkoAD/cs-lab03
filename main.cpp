@@ -5,6 +5,8 @@
 #include <curl/curl.h>
 #include <sstream>
 #include <string>
+#include <cstdlib>
+#include <ctime>
 
 
 using namespace std;
@@ -21,17 +23,31 @@ input_numbers(istream& in, size_t count) {
 
 
 Input
-read_input(istream& in, bool prompt) {
+read_input(istream& in, bool prompt, bool flag, int n) {
     Input data;
 
     if (prompt)
         cerr << "Enter number count: ";
     size_t number_count;
-    in >> number_count;
+    if (flag)
+        in >> number_count;
+    else
+        number_count=n;
 
     if (prompt)
         cerr << "Enter numbers: ";
-    data.numbers = input_numbers(in, number_count);
+    if (flag)
+        data.numbers = input_numbers(in, number_count);
+    else
+    {
+            int A = 0;
+            int B = 100;
+            vector<double> result(n);
+            for (int i=0; i<n; i++){
+                result[i]= A + rand() % ((B + 1) - A);
+            }
+            data.numbers=result;
+    }
 
     if (prompt)
         cerr << "Enter column count: ";
@@ -40,6 +56,7 @@ read_input(istream& in, bool prompt) {
 
     return data;
 }
+
 
 
 
@@ -106,7 +123,7 @@ write_data(void* items, size_t item_size, size_t item_count, void* ctx) {
 
 
 Input
-download(const string& address) {
+download(const string& address,bool flag, int n) {
     stringstream buffer;
     curl_global_init(CURL_GLOBAL_ALL);
     CURL* curl = curl_easy_init();
@@ -123,17 +140,41 @@ download(const string& address) {
             }
         }
         curl_easy_cleanup(curl);
-    return read_input(buffer, false);
+    return read_input(buffer, false, flag,n);
 }
 
 
 int
 main(int argc, char* argv[]){
+   srand(time(NULL));
+   bool flag=true;
+   int n=0;
    Input input;
     if (argc > 1) {
-        input = download(argv[1]);
-    } else {
-        input = read_input(cin, true);
+        if (strcmp(argv[1], "-generate") == 0 || strcmp(argv[2], "-generate" ) == 0){
+            if (strcmp(argv[1], "-generate") == 0){
+                n=atoi(argv[2]);
+                if (n==0){
+                    cerr << "Enter the number of generated numbers after ' -generate' ";
+                    return 0;
+                }
+                flag=false;
+                input = download(argv[3],flag,n);}
+            if (strcmp(argv[2], "-generate") == 0){
+                n=atoi(argv[3]);
+                if (n==0){
+                    cerr << "Enter the number of generated numbers after ' -generate' ";
+                    return 0;
+                }
+                flag=false;
+                input = download(argv[1],flag,n);}
+        }
+
+        else
+            input = download(argv[1],flag,n);
+    }
+     else {
+        input = read_input(cin, true, true,n);
     }
 
     // Обработка данных

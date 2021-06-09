@@ -91,9 +91,16 @@ main(){
     // Вывод данных
     show_histogram_svg(bins); */
     DWORD info = GetVersion();
-    DWORD mask = 0b00000000'00000000'11111111'11111111;
+    DWORD mask = 0x0000ffff;
     DWORD version = info & mask;
-    printf("Windows (decimal) version is %u.\n", GetVersion());
-    printf("Windows version is %08x\n",version);
+    DWORD platform = info >> 16;
+    DWORD mask_2 = 0x0000ff;
+   if ((info & 0x80000000) == 0)
+    {
+        DWORD version_major = version & mask_2;
+        DWORD version_minor = version >> 8;
+        DWORD build = platform;
+        printf("Windows v%u.%u (build %u)\n", version_major, version_minor, build);
+    }
     return 0;
 }

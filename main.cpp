@@ -27,6 +27,12 @@ Input
 read_input(istream& in, bool prompt, bool flag, int n) {
     Input data;
 
+     if (prompt)
+        cerr << "Enter column count: ";
+    size_t bin_count;
+    in >> data.bin_count;
+
+
     if (prompt)
         cerr << "Enter number count: ";
     size_t number_count;
@@ -49,11 +55,6 @@ read_input(istream& in, bool prompt, bool flag, int n) {
             }
             data.numbers=result;
     }
-
-    if (prompt)
-        cerr << "Enter column count: ";
-    size_t bin_count;
-    in >> data.bin_count;
 
     return data;
 }
@@ -172,7 +173,7 @@ main(int argc, char* argv[]){
         }
 
         else
-            input = download(argv[1],flag,n);
+            input = download(argv[1],true,0);
     }
      else {
         input = read_input(cin, true, true,n);
